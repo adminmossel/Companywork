@@ -1,0 +1,1652 @@
+{
+ "repo": "adminmossel/MHVwork",
+ "entries": [
+  {
+   "id": "e0",
+   "title": "versie 1.6",
+   "date": "oktober 2026",
+   "doc": "V1.6.md",
+   "intro": [],
+   "groups": [
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "**Open diensten**: beheerder maakt een dienst aan zonder iemand toe te wijzen en vraagt wie wil (aantal plekken; \"jij kiest\" of \"direct toewijzen\"). Op ieders homepage staat een kaart *Open dienst* met dag, tijd, aantal plekjes en de knop **Geef je op**. Beheerder wijst toe via *Dienst bewerken*.",
+      "**Bar-scherm**: klein knopje onderaan de homepage opent de idle-modus, en het scherm blijft aan zolang die draait (Screen Wake Lock).",
+      "**QR-sessies in het Logboek** (dev): wie is er via QR ingelogd, met een knop *Overal uitloggen* per account.",
+      "**Inloggen met vingerafdruk of gezicht** (per toestel, aan te zetten in Profiel → Snelle toegang).",
+      "**QR schermvullend tonen**.",
+      "**Open dienst telt af**: elke aanmelding haalt één vrij plekje af (2 plekjes, 1 aanmelding = \"1 plekje vrij\", daarna \"Vol\"); de regels dwingen dat af.",
+      "**Pinpas: gewone downloadknop** (PDF direct, of PNG) naast *Opslaan in galerij*."
+     ]
+    },
+    {
+     "name": "🗑️ Verwijderd",
+     "items": [
+      "De knop/instelling **Niet-urgente e-mails** en alle logica daarachter: alle mails worden nu altijd verstuurd."
+     ]
+    },
+    {
+     "name": "🔒 Beveiliging",
+     "items": [
+      "**Gat gedicht**: wie zelf een account aanmaakte, kon zichzelf een profiel met rol `admin` of `software` geven. Zelf-registratie werkt nu alleen nog met een geldige uitnodiging en precies de rol/e-mail/loon uit die uitnodiging. Het eerste admin-account maak je voortaan in de Firebase Console aan."
+     ]
+    },
+    {
+     "name": "⚠️ Bij deze update",
+     "items": [
+      "`firestore.rules` opnieuw publiceren en **direct testen of registreren met een uitnodiging nog werkt**. Geen nieuwe Firebase-instellingen nodig."
+     ]
+    },
+    {
+     "name": "ℹ️ Niet mogelijk op Spark",
+     "items": [
+      "Apple/Google Wallet-pas (vraagt een server om te ondertekenen). Uitleg en alternatieven staan in V1.6.md."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e1",
+   "title": "versie 1.5 \"snelle toegang\"",
+   "date": "oktober 2026",
+   "doc": "V1.5.md",
+   "intro": [],
+   "groups": [
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "**Snelcode-login** (knop *Snelcode* op de inlogpagina) met een rijk snel-overzicht (`fast.html`): aftelring voor je dienst, collega's op dezelfde dienst, komende diensten, thuiswedstrijden (vandaag, komende 7 dagen, \"tijdens je dienst\"-label) en berichten sturen met snelle zinnen. Niets onthouden, sluit na 5 minuten.",
+      "**Verplichte snelcode** voor elk account, met knop voor een veilige gegenereerde code.",
+      "**Persoonlijke QR** per account: inloggen in je volledige account. Opslaan in galerij, A4-kaartje printen of **pinpasformaat** (85,6 × 54 mm, voor + achter, PDF of PNG).",
+      "**QR scannen** op de inlogpagina (opent de camera; ook gewoon de camera-app werkt).",
+      "**QR vernieuwen** door eigenaar, beheerder (medewerkers) of dev (iedereen): oude QR direct ongeldig, mail naar de getroffene. Dev kan een snelcode resetten.",
+      "**Wit thema geoptimaliseerd**: alle tekst ≥ 5:1 contrast, gele tekst op wit donkergeel, knoppen met rand en schaduw, blauwe actieve tab, zichtbare invoervelden en kaartranden.",
+      "**Eerste login: één popup tegelijk**: (installatie →) rondleiding → teamkeuze → snelcode (+ QR).",
+      "Rustigere knoppen (*Snelcode* / *QR scannen*) in de stijl van de rest van de inlogpagina."
+     ]
+    },
+    {
+     "name": "⚠️ Verplichte stappen bij deze update",
+     "items": [
+      "Firebase Console → Authentication → Sign-in method → **Anonymous** inschakelen (gratis, Spark).",
+      "`firestore.rules` opnieuw publiceren.",
+      "Uploaden: `app.html`, `index.html`, `firestore.rules`, en de nieuwe `fast.html`, `qr.js`, `jsqr.js`, `jsqr.LICENSE.txt`, `V1.5.md`."
+     ]
+    },
+    {
+     "name": "ℹ️ Goed om te weten",
+     "items": [
+      "Geen Blaze-plan nodig: alles werkt op Spark, de beveiliging zit in de Firestore-regels.",
+      "Een geschorst account verliest direct ook zijn QR-/snelcode-toegang.",
+      "De snelcode is geen wachtwoord: wie hem raadt kan jouw dienst zien en namens jou berichten sturen, meer niet. Gebruik liefst \"Genereer een veilige code\".",
+      "De 4-pogingen-blokkade (15 min) zit in de app per toestel, niet op de server (Spark kent geen servercode): voldoende voor deze data, maar omzeilbaar door iemand die gericht aanvalt."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e2",
+   "title": "update oktober 2026 (deel 6, \"widget\")",
+   "date": "oktober 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "✨ Nieuw — het dichtstbijzijnde dat een PWA bij een widget kan komen",
+     "items": [
+      "**App-shortcuts** (Android: lang drukken op het app-icoon): \"Volgende dienst\", \"Beschikbaar melden\", \"Rooster\" — direct de juiste plek in de app, zonder eerst Home te laden.",
+      "**Cijferbadge op het app-icoon**: laat zien hoeveel diensten je vandaag hebt (1 of meer), zonder de app te hoeven openen. Verdwijnt vanzelf als je geen dienst hebt.",
+      "**\"Volgende dienst\"-snelweergave**: een piepklein, razendsnel schermpje — datum, tijd, met wie, en (indien van toepassing) de wedstrijd-waarschuwing. Geen homepage-opbouw, direct het enige wat je op dat moment wil weten."
+     ]
+    },
+    {
+     "name": "⚠️ Let op",
+     "items": [
+      "Shortcuts werken alleen als de app is \"toegevoegd aan beginscherm\" (geïnstalleerd) én alleen op Android/Chrome — iOS ondersteunt long-press-shortcuts voor web-apps niet.",
+      "De badge werkt in de meeste Android-browsers en in Safari op iOS 16.4+, maar niet overal."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e3",
+   "title": "update oktober 2026 (deel 5, bugfix)",
+   "date": "oktober 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "🐞 Opgelost",
+     "items": [
+      "**Foutieve bewering in de importuitleg en in de console-melding zelf.** Zowel de tutorial als de melding op de MHV-website beweerden dat het resultaat automatisch op je klembord stond, puur op basis van of de klembord-functie van de browser *bestaat* — niet of het kopiëren ook echt *gelukt* was. In de praktijk blokkeren browsers dit vaak vanuit de Console. De melding checkt nu het echte resultaat, en de uitleg wijst voortaan expliciet naar de handmatige \"Kopiëren\"-knop die bij het resultaat in de Console staat (stap 5 is hierop aangepast) als terugval."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e4",
+   "title": "update oktober 2026 (deel 4, bugfix)",
+   "date": "oktober 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "🐞 Opgelost",
+     "items": [
+      "**Screenshots in de nieuwe importuitleg bleven leeg.** De afbeeldingen misten het `data:image/jpeg;base64,`-voorvoegsel, waardoor de browser ze niet kon laden. Gefixt — alle 5 screenshots zijn gecontroleerd en laden nu correct."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e5",
+   "title": "update oktober 2026 (deel 3, bugfixes)",
+   "date": "oktober 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "🐞 Opgelost",
+     "items": [
+      "**Uitklapbaar dienstadvies en \"bekijk alle wedstrijden\" deden niets.** De functie die de knop nodig had (`refreshMatchesUI`) was per ongeluk niet globaal beschikbaar binnen de app — een klik gaf een foutmelding in de console en er gebeurde zichtbaar niets. Dit verklaart vermoedelijk ook de klacht dat een blok soms later ineens \"vanzelf\" opschuift: de klik werkte pas zodra er toevallig ergens anders in de app al een herlaadmoment plaatsvond. We hebben de hele app nagelopen op dit type fout (een knop die een functie aanroept die niet bestaat) — er waren geen andere plekken met hetzelfde probleem.",
+      "**Leesbevestiging in de privéchat werkte alleen bij het openen van een gesprek.** Bleef het gesprek open terwijl er een nieuw bericht binnenkwam, dan werd dat niet meteen als \"Gezien\" gemarkeerd. Dit werkt nu ook terwijl het gesprek al open staat."
+     ]
+    },
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "**Aankondiging bewerken.** Wie een aankondiging mag verwijderen, mag 'm nu ook aanpassen (titel, tekst, zichtbaarheid, afbeelding, bijlages). Een beheerder kan nog steeds geen aankondiging van een dev bewerken of verwijderen.",
+      "**Stap-voor-stap uitleg bij het importeren van wedstrijden**, met echte schermafbeeldingen, direct bij het importpaneel (knop \"Hoe werkt importeren?\"). Met de aanbeveling dit op een laptop/desktop te doen, omdat rechtsklikken en de Developer Tools op een telefoon anders werken."
+     ]
+    },
+    {
+     "name": "⚠️ Na het updaten",
+     "items": [
+      "Publiceer de nieuwe `firestore.rules` opnieuw (de regel voor het bewerken van aankondigingen is aangescherpt, gelijk aan de regel voor verwijderen)."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e6",
+   "title": "update oktober 2026 (deel 2)",
+   "date": "oktober 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "✅ Opgelost",
+     "items": [
+      "**Wedstrijden dubbel bij herimporteren.** Elke wedstrijd krijgt nu een vaste sleutel (datum + thuisteam + uitteam) in plaats van het wisselende LISA-record-id. Een herhaalde import of sync werkt dezelfde wedstrijd bij. Bestaande dubbelingen van vóór deze update worden bij de eerstvolgende import automatisch opgeruimd."
+     ]
+    },
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "**Dienstadvies en wedstrijdenlijst ingeklapt** — namen te veel ruimte in op Home/Rooster en bij Instellingen.",
+      "**Gastaccount definitief maken** (dev): verwijdert de vervaldatum, wordt een gewoon account.",
+      "**Zoeken in de groepschat** + een apart **archief van vastgepinde berichten**.",
+      "**Leesbevestiging (\"Gezien\") en \"aan het typen…\"** in de privéchat.",
+      "**Kalender vernieuwd**: eigen stijl per stip (dienst/wedstrijd), rustigere maand-animatie, legenda.",
+      "**Eigen team per account** (verplicht bij eerste login, ook voor bestaande accounts, wijzigbaar in Profiel). Bij het samenstellen van een dienst waarschuwt de app als iemand die dag een eigen wedstrijd heeft, met het advies dit in de Lisa-app te checken.",
+      "**Wedstrijd-importlog (alleen dev)**, met een knop om een hele import in één keer ongedaan te maken.",
+      "**Offline-indicator** + berichten (groepschat en privé) die automatisch alsnog verstuurd worden zodra er weer verbinding is."
+     ]
+    },
+    {
+     "name": "⚠️ Na het updaten",
+     "items": [
+      "Publiceer de nieuwe `firestore.rules` opnieuw (regels voor `matchImportLog` en het `typing`-veld bij privéberichten).",
+      "Zet ook de nieuwe `sync-lisa-matches.mjs` in de GitHub Actions-workflow, anders blijft de automatische sync het oude, dubbel-gevoelige ID gebruiken.",
+      "Eerste keer inloggen na deze update vraagt iedereen (behalve dev) om een team te kiezen — dat gebeurt automatisch, geen actie nodig."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e7",
+   "title": "update oktober 2026",
+   "date": "oktober 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "✅ Opgelost",
+     "items": [
+      "**Groepschat stotterde na het versturen** — de hele lijst werd bij elke update opnieuw getekend, met bij elk bericht de intro-animatie en een sprong naar beneden. Nu animeert alleen een écht nieuw bericht, en blijft je scrollpositie staan als je omhoog scrolt."
+     ]
+    },
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "**Dev-beheer met tabs** (Accounts · Gasten · Wedstrijden · Berichten · Instellingen), net als bij beheerder. Logboek en Aankondigingen blijven eigen tabbladen.",
+      "**Dev kan wedstrijden importeren en invoeren**; bij de laatste import staat wie het deed (of \"automatische sync\").",
+      "**Wedstrijdkaart** toont alleen tijd, logo's, wie tegen wie en waar.",
+      "**Dienstadvies** voor beheerders (Rooster en Home) op basis van wedstrijden, met \"Maak dienst aan\" (voorinvuller). Regels staan bovenaan als `ADVICE_RULES` in `app.html`.",
+      "**Tijdelijke accounts moeten door dev worden goedgekeurd**; dev beheert ze in de tab Gasten. Beheerders kunnen een gastaccount niet meer zelf verlengen (ook afgedwongen in de Firestore-regels).",
+      "**Foto's en bijlagen in privéberichten** (max 700 KB, nieuwe collectie `dmFiles`).",
+      "**Aankondigingen**: werkbalk met live voorbeeld (vet, schuin, onderstreept, doorgehaald, markeren, kop, lijst, link). Foto mee in de e-mail als miniatuur.",
+      "**Eigen achtergrond** — lokaal op het toestel, kost geen database-opslag."
+     ]
+    },
+    {
+     "name": "⚠️ Na het updaten",
+     "items": [
+      "Publiceer de nieuwe `firestore.rules` (regels voor `dmFiles` en gastaccount-velden).",
+      "Voor de foto in de e-mail: voeg `{{{image_html}}}` toe aan je EmailJS-aankondigingstemplate (zie HANDLEIDING)."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e8",
+   "title": "update augustus 2026",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [
+    "Puntsgewijs, gekoppeld aan de oorspronkelijke lijst."
+   ],
+   "groups": [
+    {
+     "name": "✅ Opgelost",
+     "items": [
+      "**Announcement-knop \"insufficient permissions\"** — de `announcements`-collectie had helemaal geen Firestore-regel, dus werd elke schrijfactie geblokkeerd. Regel toegevoegd.",
+      "**Wachtwoord-reset link ongeldig** — het oude systeem maakte nooit een écht tijdelijk wachtwoord aan. Volledig vervangen door Firebase's eigen, beveiligde reset-flow. *(check Stap 3 in HANDLEIDING.md — authorized domain!)*",
+      "**Rooster opent niet op \"Alles\"** — twee losstaande tab-sets deelden per ongeluk dezelfde variabele. Losgekoppeld; rooster opent nu standaard op \"Alles\".",
+      "**Beheerders konden geen dev-rol toewijzen** — het gekozen rol-veld werd nooit opgeslagen bij het aanmaken van een uitnodiging. Gefixt.",
+      "**@tag in chat stuurt alleen nog een pushmelding**, geen e-mail meer.",
+      "**Pin-bug in chat** — het vastgepinde bericht stond bovenin de scrollende berichtenlijst en verdween dus bij scrollen. Nu een eigen vaste balk, altijd zichtbaar.",
+      "**Uitbetaalknop uit de chat gehaald**; foto's versturen toegevoegd (incl. slepen/droppen).",
+      "**Export-agendaknop werkte niet (vooral op mobiel/PWA)** — iOS/Android PWA's blokkeren soms stille blob-downloads. Nu eerst een poging via de Deel-functie (Web Share API), met download als fallback op desktop. Ook toegevoegd aan de dagweergave (stond er eerder niet).",
+      "**Kalender \"loopt vast\"** — defensieve null-checks/try-catch toegevoegd rond het kalender-rendering, zodat één foutje niet alles blokkeert.",
+      "**Promo.html paste niet op mobiel** — de vaste 1280×720-pixelinhoud werd nooit echt geschaald. Nu een correcte, universele schaal-fix (werkt in portret én landschap).",
+      "**Help-knop** stuurt niet meer naar de promo-pagina, maar toont per pagina een korte, relevante uitleg (wat het is, wat je ermee kan, tips).",
+      "**Beheerder zag zelf nooit aankondigingen op de homepage** — ontbrak, nu toegevoegd."
+     ]
+    },
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "**Privéberichten (DM)** tussen medewerker en beheerder/dev, los van de groepschat.",
+      "**Meldingen is nu een volledige pagina** (i.p.v. een dropdown-paneeltje), met tabs \"Systeem\" (aankondigingen/tags/uitbetalingen — visueel anders) en \"Berichten\" (de DM's).",
+      "**Bevestigingsreminder-systeem**: melding direct na afloop van een onbevestigde dienst, tweede herinnering na een instelbaar aantal uren (standaard 30, aan te passen onder Beheer → Instellingen), en de oorspronkelijke tijd is daarna niet meer door de beheerder aan te passen — status toont \"Geweest, onbevestigd\".",
+      "**Dashboard medewerker**: \"Goedgekeurd\" en \"Uitbetaald\" nu apart zichtbaar i.p.v. samengevoegd.",
+      "**PWA-installatiepopup** direct na het aanmaken van een account, met een vinkje bij Profiel zodra de app daadwerkelijk geïnstalleerd is.",
+      "**Dev: speciale aankondigingen** — eigen (rode) kleur, verschijnen als in-app pop-up, en sturen meteen push + e-mail naar de doelgroep.",
+      "**Dienstnotities met foto** — beheerders kunnen bij een dienst een notitie + afbeelding toevoegen; medewerkers zien dit in hun rooster en krijgen een melding.",
+      "**Meer animaties**: tabs, knoppen, chatbubbels, tabbalk, modals.",
+      "**Beveiliging aangescherpt**: uitnodigingen kunnen niet meer door willekeurige bezoekers herschreven worden vóór registratie, wachtwoord-reset-systeem grondig herzien."
+     ]
+    },
+    {
+     "name": "🔧 Optioneel, vereist eigen actie (zie HANDLEIDING.md)",
+     "items": [
+      "**Eigen e-mailtemplate per soort mail** — structuur staat klaar, jij vult de EmailJS- template-ID's in.",
+      "**Gmail SMTP i.p.v. EmailJS** — code staat klaar in `functions/`, vereist Firebase Blaze-plan en handmatige deploy (kan niet vanuit deze sessie gedaan worden)."
+     ]
+    },
+    {
+     "name": "⚠️ Nog niet aangepast / bekende beperking",
+     "items": [
+      "De exacte 30-uurs reminder is **client-side getimed** (checkt zodra iemand de app opent), niet een exacte server-cronjob — op GitHub Pages zonder Cloud Functions kan dat niet nauwkeuriger. In de praktijk hebben beheerders/medewerkers de app regelmatig open, dus komt dit er in de praktijk dicht bij, maar het is geen harde garantie op de minuut."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e9",
+   "title": "🆕 Update 2 — bugfixes op gemelde problemen + nieuwe features",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "🐛 Bevestigde bugs (root cause gevonden, niet alleen symptoombestrijding)",
+     "items": [
+      "**\"Eigen afwezigheid niet zichtbaar/verwijderbaar\"** — de Firestore-query combineerde een filter met een sortering op een ander veld, wat een composite index vereiste die er nooit was. Zonder foutafhandeling faalde dit stil (geen data, geen foutmelding). Query vereenvoudigd (client-side sorteren) + foutafhandeling toegevoegd.",
+      "**\"Account met zelfde e-mail kan niet opnieuw aangemaakt worden\"** — \"verwijderen\" in het dev-paneel wiste alleen het Firestore-profiel, nooit het Firebase Auth-account (dat kan technisch niet vanuit de app zelf). Duidelijke waarschuwing + handmatige oplossing toegevoegd (Firebase Console → Authentication), en een echte Cloud Function klaargezet voor als je dit ooit automatisch wil laten verlopen.",
+      "**Agenda-export \"nog steeds kapot\"** — extra, specifiek voor iOS betrouwbaardere aanpak toegevoegd (`data:`-URI, een bekend werkend patroon in PWA's op Safari)."
+     ]
+    },
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "Automatisch groen vinkje wanneer een hele dienst klaar én iedereen uitbetaald is.",
+      "Beheerder kan een dienst aanmaken zónder direct iemand toe te wijzen (oranje status), met automatische herinnering aan beheerders naarmate de datum nadert.",
+      "Pushmeldingen uitgebreid: dag ervoor, 1 uur ervoor, direct na afloop (\"hoe was je dienst?\"), en de bestaande 30-uurs vervolgherinnering.",
+      "E-mail/push-keuze bij het versturen van een privébericht via Meldingen; afzender staat duidelijk in titel + e-mail.",
+      "E-mailvoorkeuren per medewerker: niet-urgente mails (bijv. vervallen dienst, notitie) zijn uit te zetten bij Profiel. Wachtwoord-mails en persoonlijke berichten van beheerder/dev blijven altijd binnenkomen.",
+      "Profielfoto's voor iedereen (opgeslagen als gecomprimeerde afbeelding in het profiel zelf — geen Firebase Storage/Blaze-upgrade nodig), zichtbaar in chat en accountoverzicht.",
+      "Excel-export van diensten over een gekozen periode: medewerkers als rijen, datums als kolommen, kruisje + tijden in de cellen.",
+      "Geverifieerd-vinkje is nu een echt icoon (geen emoji meer) en door de dev toe te wijzen/intrekken bij elk account, niet meer alleen automatisch voor dev-accounts.",
+      "\"Bericht naar beheerder\"-knoppen bij Profiel verwijderd (overbodig sinds Meldingen dit al kan). Meldingen-icoon nu geel."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e10",
+   "title": "🆕 Update 3 — dev als volwaardig eigen accounttype",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "",
+     "items": [
+      "**Dev heeft nu een écht eigen navigatiestructuur**, net als beheerder z'n eigen tabs heeft — niet langer alles verzameld in één \"Dev\"-tab met subtabjes. Drie aparte pagina's onderin de tabbalk: **Beheer** (accounts + uitzending), **Aankondiging**, **Logboek**. Plus Chat, Meldingen en Profiel, die alle rollen delen.",
+      "**Dev heeft geen Home-tab** — een dev is geen medewerker en start nu direct op de Beheer-pagina.",
+      "Help-uitleg (het \"?\"-icoon) bijgewerkt met de juiste tekst per nieuwe dev-pagina."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e11",
+   "title": "🚨 Hotfix — \"geen enkele knop werkt na inloggen\"",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [
+    "Kritieke fout: bij het opsplitsen van het dev-paneel in aparte pagina's bleef er één verwijzing",
+    "staan naar de oude, inmiddels verwijderde functie `renderDev`. Daardoor crashte het script",
+    "meteen bij het opstarten, vóórdat alle knoppen aan hun functies gekoppeld konden worden —",
+    "inloggen werkte nog (apart stukje code), maar daarna reageerde niets meer. Verwijderd en",
+    "getest met een volledige runtime-simulatie (niet alleen een syntax-check) om zeker te zijn",
+    "dat alle 77 functies weer correct gebonden worden."
+   ],
+   "groups": []
+  },
+  {
+   "id": "e12",
+   "title": "🆕 Update 4 — bugfixes op je laatste meldingen",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "",
+     "items": [
+      "**Privébericht sturen \"hele veld is 1 knop\"** — root cause: kwetsbare, dubbel-geëscapete quotes in een onclick-attribuut met de naam van de ontvanger erin, wat bij bepaalde tekens de HTML-parsing brak. Volledig herschreven naar `data-uid`-attributen + losse click-listeners per rij (robuuster, geen escaping-risico meer).",
+      "**Zwart scherm bij klikken op een chatfoto** — `window.open()` op een `data:`-URI faalt vaak stil in een PWA. Vervangen door een echte in-app lightbox (overal waar op een foto geklikt kan worden: chat, dienstnotities).",
+      "**Logboek uitgebreider en overzichtelijker**: per-gebruiker samenvattingskaartjes (aantal logins, eerste/laatste keer) bovenaan, aanklikbaar om de tijdlijn te filteren, plus een \"Exporteer naar Excel\"-knop.",
+      "**Tab- en meldingen-icoon animeren nu** bij het wisselen van pagina (kleine \"pop\"-animatie).",
+      "**Geschorst account krijgt een eigen pagina** direct na inloggen, met de reden die de beheerder/dev bij het schorsen kan invullen — i.p.v. een simpele foutmelding op de inlogpagina.",
+      "**README volledig herschreven**: overzichtelijker, met badges, inhoudsopgave, projectstructuur, en een licentie-sectie (inclusief de externe bibliotheken die MHVwork gebruikt en hún licenties)."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e13",
+   "title": "🆕 Update 5 — bugfixes ronde 2",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "",
+     "items": [
+      "**Animaties die na 1x stopten** → vervangen door de Web Animations API, speelt nu altijd opnieuw af.",
+      "**Privébericht/aankondiging-acties \"deden niets\"** → root cause: geen foutafhandeling rond Firestore-aanroepen in `openDMThread`, `sendDM` en `deleteAnnouncement`. Als zo'n aanroep faalt (bv. rules nog niet bijgewerkt), gebeurde er he-le-maal niets zichtbaars. Nu tonen alle drie een duidelijke foutmelding met reden.",
+      "**Niet-beschikbare medewerkers toch toevoegbaar bij het bewerken van een dienst** → `openEditShift` checkte beschikbaarheid niet (in tegenstelling tot bij aanmaken). Gefixt, met behoud van reeds-toegewezen medewerkers.",
+      "**E-mail-keuze bij élke aankondiging** (niet alleen speciale).",
+      "**Geen emoji meer op de schorsingspagina** — nu een SVG-icoon.",
+      "**Beheerders konden dev-aankondigingen niet verwijderen** — zelfde silent-failure patroon als hierboven, nu met foutmelding. Dev's eigen Aankondiging-pagina toont nu ook alle bestaande aankondigingen (kon voorheen niet).",
+      "**\"Tygo\" hernoemd naar \"Dev\"** in de hardcoded dev-bypass. *Let op: als er al een bestaand account met de naam \"Tygo (Dev)\" in je database staat, pas die zelf even aan via Beheer → Accounts → ✏ Rol/gegevens — nieuwe accounts krijgen nu automatisch \"Dev\".*",
+      "**Datum aanpasbaar bij het bewerken van een afwezigheidsmelding** (kon voorheen alleen de reden).",
+      "**Logboek opvragen via het gesprek met de dev**: beheerder klikt \"Vraag logboek op\" in de chat met de dev → dev kiest welke gebruikers in de export mogen en keurt goed → aanvrager krijgt een downloadknop in hetzelfde gesprek.",
+      "**Agenda-export grondig herzien**: na onderzoek bleek elke losse \"trick\" (blob-download, Share API, `data:`-URI) op zich onbetrouwbaar — Apple blokkeert het dynamisch openen van .ics-bestanden in sommige gevallen, en Android-browsers hebben bekende bugs met .ics-afhandeling. Nu een keuze-scherm (zoals Eventbrite/Meetup): \"Google Agenda\" (opent direct, werkt universeel) of \"Apple Agenda / Outlook\" (.ics-download, nu ook met de verplichte `DTSTAMP`-regel die eerder ontbrak — sommige agenda-apps weigerden het bestand zonder die regel volledig)."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e14",
+   "title": "🆕 Update 6 — twee kritieke fixes + verdere verbeteringen",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "🚨 Kritiek (verklaart meerdere terugkerende klachten)",
+     "items": [
+      "**Agenda-export \"werkte nog steeds niet\"**: de knoppen verwezen rechtstreeks naar `allShifts` middenin een `onclick=\"\"`-attribuut. Zulke attributen draaien in de globale scope, terwijl `allShifts` module-scoped is — dus onzichtbaar daarbuiten. Dit gaf altijd een `ReferenceError`, op alle apparaten, meteen bij het klikken. Gefixt door alleen het ID mee te geven.",
+      "**Privébericht \"werkt nog steeds niet\"**: eindelijk de échte oorzaak gevonden dankzij jouw screenshot — een subtiele fout in de Firestore-regel crashte bij het *allereerste* bericht naar iemand nieuws (vóór het gesprek bestaat), en Firestore behandelt zo'n crash als een blokkade. **Dit vereist opnieuw dat je de bijgewerkte `firestore.rules` publiceert in de Firebase Console — zonder die stap blijft dit stuk.**"
+     ]
+    },
+    {
+     "name": "✨ Verder deze ronde",
+     "items": [
+      "Beheerders kunnen **geen** dev-aankondigingen meer verwijderen (teruggedraaid, was per ongeluk andersom gefixt) — zowel in de app als hard in de Firestore-regels.",
+      "Geverifieerd-vinkje en profielfoto tonen nu op veel meer plekken (roosterlijsten, dienstenoverzicht, privéberichten-lijst, logboek), niet alleen chat/profiel.",
+      "Ruilverzoek: als iemand interesse toont, wordt het **originele** bericht in de chat nu ook duidelijk visueel bijgewerkt (gele rand + \"✓ interesse\"-label), niet alleen een nieuw apart berichtje.",
+      "Verborgen easter egg: tik 7x snel op het logo 🍺",
+      "Feestdagen-thema (kerst, oud & nieuw, Koningsdag, Halloween, Pasen): klein feestelijk accent bij het logo + eenmalige felicitatie in de app. *Het daadwerkelijke beginscherm-icoon van de PWA kan helaas niet dynamisch wisselen — dat is een technische beperking van hoe app-iconen werken, geen keuze.*",
+      "E-mailvoorkeuren-sectie verduidelijkt: dit gaat alleen over e-mail, in-app pushmeldingen beheer je bij Meldingen."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e15",
+   "title": "🆕 Update 7",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [],
+   "groups": [
+    {
+     "name": "🚨 Belangrijke architectuurfix",
+     "items": [
+      "**Pushmeldingen \"werkten niet helemaal\"**: geanalyseerd en uitgelegd — de bestaande \"push\" toonde alleen een melding lokaal bij wie de actie uitvoerde, nooit bij de daadwerkelijke ontvanger op een ander apparaat. Dat kan alleen via een echte pushserver. Firebase Cloud Messaging-infrastructuur toegevoegd (client-registratie + Cloud Function + service worker) — **optioneel te activeren, zie Stap 6 in HANDLEIDING.md**. Zonder die stap blijft alles werken zoals nu (lokale meldingen)."
+     ]
+    },
+    {
+     "name": "✨ Nieuw",
+     "items": [
+      "**Privéberichten zijn nu een volledige pagina** i.p.v. een pop-up, met terugknop, precies zoals de groepschat.",
+      "Privéberichten zijn nu **altijd alleen een pushmelding** — geen e-mail-keuze meer.",
+      "**Geweest + volledig uitbetaalde diensten zijn niet meer te bewerken of verwijderen** — tonen een \"🔒 Afgehandeld\"-label.",
+      "**Custom laadanimatie** i.p.v. een generieke spinner (het logo dat zachtjes ademt + een laadbalk).",
+      "**Easter egg verbeterd**: elke tik op het logo telt nu mee (bijgehouden), en bij 7x snel achter elkaar ontgrendel je een **geheim thema**: elke dag een nieuwe foto van NASA's \"Astronomy Picture of the Day\" als achtergrond, te kiezen bij Profiel → Thema.",
+      "**Nieuw thema: \"Liquid Glass\"** 🫧 — een kleurrijk, vervagend glaseffect-thema, gewoon te kiezen naast licht/donker/systeem (systeem blijft de standaard)."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "e16",
+   "title": "🔐 Update 8 — beveiligingsaudit (P0 + belangrijkste P1)",
+   "date": "augustus 2026",
+   "doc": null,
+   "intro": [
+    "Naar aanleiding van een grondige externe security-review. Dit was de belangrijkste update tot nu toe."
+   ],
+   "groups": [
+    {
+     "name": "🚨 P0 — direct opgelost",
+     "items": [
+      "**`seed-admin.html` verwijderd** — dit bestand bevatte letterlijk een e-mailadres + wachtwoord in de broncode, zichtbaar voor iedereen die de (publieke) GitHub-repo opent. Vervangen door een veilige, handmatige eerste-admin-procedure via Firebase Console zelf (zie HANDLEIDING.md, stap 1.7) — daar staat nergens een wachtwoord in code.",
+      "**Hardcoded admin/dev-bypass verwijderd** uit `app.html`. Rollen komen nu uitsluitend uit het Firestore-document van de gebruiker zelf, zoals het hoort — geen tweede, gevaarlijke autorisatielaag op basis van een e-mailadres-string meer.",
+      "**`tempPw`-restcode verwijderd** uit `register.html` — dit veld werd nergens meer daadwerkelijk gezet, maar de kwetsbare logica (incl. een rauwe REST-call naar Google's identity-API) stond er nog wel, wat een onnodig risico was. Vereenvoudigd naar een duidelijke foutmelding.",
+      "**Invite-uitnodigingen herontworpen**: `list` (de hele collectie in één keer opvragen) stond open voor **iedereen op internet, zonder in te loggen** — dat betekende dat elke openstaande uitnodiging (naam, e-mail, loon) uit te lezen was zonder enige toegang. Nu: het ophalen van één specifieke, unieke link blijft mogelijk (dat is hoe uitnodigingslinks werken), maar de hele lijst doorzoeken kan alleen nog door beheerder/dev."
+     ]
+    },
+    {
+     "name": "🔒 P1 — belangrijkste punt opgelost",
+     "items": [
+      "**`/users`-collectie was volledig leesbaar voor elke ingelogde medewerker** — inclusief e-mailadres en loon van alle collega's. Volledig herontworpen: een medewerker kan nu alleen nog het **eigen** volledige profiel lezen, plus het volledige profiel van beheerders/dev (nodig om ze te kunnen mailen bij een ruilverzoek of privébericht). Voor het herkennen van collega's in chat/rooster (naam, rol, foto, vinkje) bestaat nu een aparte, bewust minimale `publicProfiles`-collectie zonder e-mail of loon."
+     ]
+    },
+    {
+     "name": "✅ Overige P1-punten",
+     "items": [
+      "**Verlopen/gebruikte uitnodiging opnieuw bruikbaar**: al afgedekt — de regel controleert `!resource.data.used`, dus een reeds-gebruikte link kan niet opnieuw geclaimd worden.",
+      "**Medewerker kan zichzelf niet admin/dev maken**: al afgedekt én dit keer extra getest via de regel-logica — het `role`-veld zit in de lijst met velden die een gebruiker nooit zelf mag wijzigen.",
+      "**Medewerker kan geen betalingen van anderen lezen**: de `payments`-collectie was al beperkt tot beheerder/dev; ongewijzigd, klopt al.",
+      "Live testen met een echt medewerker-, beheerder- en dev-account kan ik niet vanuit hier (ik heb geen toegang tot jouw Firebase-project) — de bovenstaande punten zijn gecontroleerd via de regel-logica zelf, maar een handmatige eindcontrole met drie echte testaccounts blijft een goed idee vóór je live gaat."
+     ]
+    },
+    {
+     "name": "📌 P2 — voor later (nog niet gedaan, bewust)",
+     "items": []
+    }
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "h": "902031c",
+   "full": "902031ccacf1d9ebb08ff5c8e82effc7113397ab",
+   "d": "2026-11-04",
+   "t": "v.1.5.16 IBAN",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "86f3a3b",
+   "full": "86f3a3b431e1a98124e544aac48e26007adb9585",
+   "d": "2026-11-04",
+   "t": "v1.5.15",
+   "b": "integratie met ons hoofdbedrijf, companywork. en IBAN + kleine toevoegingen en veranderingen.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "0c6d500",
+   "full": "0c6d500fadd6664c6ca522e8057ce009de1bacb2",
+   "d": "2026-10-30",
+   "t": "v1.5.12 bugfix, and downloadbutton QR",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "fe68d58",
+   "full": "fe68d58643330f3e412380f549ae9f70accc0283",
+   "d": "2026-10-29",
+   "t": "v1.5.10 Big adds.",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "967590c",
+   "full": "967590c57970bf4ec840d76a6f7796193cff1e3c",
+   "d": "2026-10-29",
+   "t": "v1.5.2, major changes.",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "216254b",
+   "full": "216254b06b8863d619340544cc2d6a2d18609d56",
+   "d": "2026-10-28",
+   "t": "v1.5.1, Official",
+   "b": "fixed bugs.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "01c0e97",
+   "full": "01c0e97c45b322ef704f8fcd3b0f5be3a15b8760",
+   "d": "2026-10-28",
+   "t": "v1.5, Under testing.",
+   "b": "We added alot!",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "eeb2d9b",
+   "full": "eeb2d9bc99c03e8b4f9ea047a35eba3a187764e9",
+   "d": "2026-10-28",
+   "t": "login animation v1.4.19",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "facecfb",
+   "full": "facecfb5a39542e22d4d791bf078214ca7d9949a",
+   "d": "2026-10-27",
+   "t": "new loading screen, and animations v1.4.13",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "dd4fb22",
+   "full": "dd4fb229820fafdcd24569bb12aebb5f07d03107",
+   "d": "2026-10-27",
+   "t": "Update index, v1.4.12",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "f9020d1",
+   "full": "f9020d127f50be03565fa0cb0ab6f19f5d13b78c",
+   "d": "2026-10-27",
+   "t": "Update index, v1.4.11",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "e5ebd5a",
+   "full": "e5ebd5a1d420d488cbd704ec6b34d37813f0f696",
+   "d": "2026-10-26",
+   "t": "Update index.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "31d9033",
+   "full": "31d90339fe9434f01660ebffaaf63683414220b4",
+   "d": "2026-10-08",
+   "t": "v1.4.8 Fast usage extras",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "effd27a",
+   "full": "effd27a7bde7c8233cf3658b02871fe245e6107f",
+   "d": "2026-10-05",
+   "t": "v1.4.7",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "ad1ed52",
+   "full": "ad1ed52285728f66210d1d7de187aedc22426f0f",
+   "d": "2026-10-05",
+   "t": "v1.4.7 bugfix of gameinport",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "9533124",
+   "full": "95331246b32df02107a03930d4d572f8fd2611f8",
+   "d": "2026-10-04",
+   "t": "v1.4.6 and extras",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "facdc5c",
+   "full": "facdc5c445c61cc7c575a3c15e60993550259381",
+   "d": "2026-10-04",
+   "t": "v1.4.5",
+   "b": "added the rest of v1.4",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "5471506",
+   "full": "5471506c6e803a5ba0c4fb654756fcd86a43299b",
+   "d": "2026-10-04",
+   "t": "v1.4",
+   "b": "Groepschat: alleen een nieuw bericht animeert nog, de rest blijft stil. Scroll je omhoog, dan blijft de lijst op zijn plek.\r\nDev-beheer: tabs voor Accounts, Gasten, Wedstrijden, Berichten en Instellingen, net als bij beheerder. Aankondigingen en Logboek blijven eigen tabbladen.\r\nWedstrijden: dev kan nu ook importeren en invoeren. Bij de laatste import staat wie het deed (\"door Naam\" of \"automatische sync\"). De wedstrijdkaart toont alleen tijd, logo's, wie tegen wie en waar.\r\nDienstadvies: op de Home en het Rooster van de beheerder staat per wedstrijddag een voorstel met tijden en aantal mensen. De knop \"Maak dienst aan\" vult het formulier voor. Handmatig aanmaken blijft kunnen.\r\nGastaccounts:\r\nEen gast die een beheerder aanmaakt kan pas inloggen nadat dev hem goedkeurt.\r\nDev krijgt een melding en kan in de tab Gasten goedkeuren, afwijzen, verlengen, een datum kiezen, intrekken of verwijderen.\r\nBeheerders kunnen een gast niet meer zelf verlengen, ook niet via de Firestore-regels.\r\nPrivéchat: foto's en bijlagen tot 700 KB, in een nieuwe collectie dmFiles. Dat blijft binnen Firestore, dus je Spark-plan blijft kloppen.\r\nAankondigingen: werkbalk met live voorbeeld voor vet, schuin, onderstreept, doorgehaald, markeren, kop, lijst en link.\r\nEigen achtergrond: Profiel → Weergave → camera-icoon. De foto blijft alleen op dat toestel staan en kost geen databaseruimte.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "5dd14a8",
+   "full": "5dd14a8f74445f2b0d844da21713c9a84a93b265",
+   "d": "2026-10-04",
+   "t": "v1.3.20",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "331c3c1",
+   "full": "331c3c1a4b125726ba8dcaa29ac3ddb911590955",
+   "d": "2026-10-03",
+   "t": "v1.3.19",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "2068e71",
+   "full": "2068e7167575e08d19e42e3cedc3159765dd8e95",
+   "d": "2026-10-03",
+   "t": "V1.3.19",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "c9c7b16",
+   "full": "c9c7b169173fe627deb0dc2034e9e2d9bf8c76cf",
+   "d": "2026-10-02",
+   "t": "v.1.3.18",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "2b6b582",
+   "full": "2b6b5828c3dba3c0b9850dbcb60ee5e797a98f50",
+   "d": "2026-10-02",
+   "t": "V1.3.17",
+   "b": "hoping that it works now.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "0d4cb4f",
+   "full": "0d4cb4f51ca5159a0f429d39cd0b2c76b5445a35",
+   "d": "2026-10-02",
+   "t": "chat fix test",
+   "b": "",
+   "a": "jorus1133-gif"
+  },
+  {
+   "h": "7684a66",
+   "full": "7684a66cbec5f472190da58fc975bda056b1c9ae",
+   "d": "2026-10-02",
+   "t": "v1.3.15",
+   "b": "hoping it works now",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "925df00",
+   "full": "925df007b0d0f454beb5030b6b4ab61d67e2047a",
+   "d": "2026-10-01",
+   "t": "Update sync-matches.yml",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "ae5abb7",
+   "full": "ae5abb7cd4fd1c536e5e814d5379991acb8a08e5",
+   "d": "2026-10-01",
+   "t": "Update sync-matches.yml",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "13e0bb5",
+   "full": "13e0bb554cce29435d59a761b1fb493f3a123242",
+   "d": "2026-10-01",
+   "t": "v1.2.15",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "9bef33c",
+   "full": "9bef33ceaa00858518d8e9b2518e32e6e6cf1509",
+   "d": "2026-10-01",
+   "t": "second half of V1.2.14 (Update sync-matches.yml)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "f7a12f3",
+   "full": "f7a12f3393f38b0de3926e7ae0244a534d44fd31",
+   "d": "2026-10-01",
+   "t": "First half of V1.4.11",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "e0ba978",
+   "full": "e0ba978d1b03de4a4355b99d53fdd4652838e6c4",
+   "d": "2026-10-01",
+   "t": "new test for chat fix",
+   "b": "",
+   "a": "jorus1133-gif"
+  },
+  {
+   "h": "4315802",
+   "full": "431580248b397da03caae26f42bc1809d2201963",
+   "d": "2026-10-01",
+   "t": "werkte helaas weer niet",
+   "b": "Restore sorting of chat messages by creation date.",
+   "a": "jorus"
+  },
+  {
+   "h": "d1e446c",
+   "full": "d1e446c9d162eedf96a7a5f45ada4f189eb6a1da",
+   "d": "2026-10-01",
+   "t": "test for chat fix",
+   "b": "",
+   "a": "jorus1133-gif"
+  },
+  {
+   "h": "b87928f",
+   "full": "b87928f63b2269b9d623b87edff0fc1c79e78c3b",
+   "d": "2026-10-01",
+   "t": "Update sync-lisa-matches.mjs AGAIN (V1.4.5)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "6b3f82c",
+   "full": "6b3f82c83693ca46fd667259dd35c2b36ce1e8fe",
+   "d": "2026-09-30",
+   "t": "Update sync-lisa-matches.mjs AGAIN (V1.4.4)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "0567214",
+   "full": "05672141038bb0c3f3c84f8a09373d3735d6e15f",
+   "d": "2026-09-30",
+   "t": "Update sync-lisa-matches.mjs again (V1.4.2)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "0ef25cf",
+   "full": "0ef25cfeaf8624c3a7d5802482cd3a994e6d178e",
+   "d": "2026-09-30",
+   "t": "Update sync-lisa-matches.mjs (V1.4.2)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "f95122d",
+   "full": "f95122d841055a7b3dfaccd439f6b9ceab95ee9e",
+   "d": "2026-09-30",
+   "t": "Type-error (V1.4.1)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "b0b84bf",
+   "full": "b0b84bf7e4a4c547f819f034260299a7202cff60",
+   "d": "2026-09-30",
+   "t": "Move sync workflow to GitHub Actions folder",
+   "b": "Essential for the new V1.4",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "fd06194",
+   "full": "fd0619464e899bbc55080b29138c785483115014",
+   "d": "2026-09-30",
+   "t": "V1.4 (BIG UPDATE)",
+   "b": "We added all game data straight from KNHB. Too much to explain.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "c003b31",
+   "full": "c003b31b36d6342a1ca67517f2914d356cbf5803",
+   "d": "2026-09-30",
+   "t": "promotion video update.",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "739ac60",
+   "full": "739ac60e91d5e2e1eb4954bdc7f48bef037769e0",
+   "d": "2026-09-29",
+   "t": "Our first promotion video. (no version update)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "e1fb9bf",
+   "full": "e1fb9bf033184bfd1d56759470b077a6f3c2f0d9",
+   "d": "2026-09-29",
+   "t": "v1.2.8",
+   "b": "We added a match thing. We are searching for an API key for live data. for now the best solution. \r\nA beheerder can add matches with time so employees can see when the last wed is done.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "43531eb",
+   "full": "43531eb4258fd844babdf62b2763960aa510df07",
+   "d": "2026-09-29",
+   "t": "v1.2.6 see changelog",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "986337b",
+   "full": "986337b135fdda337ccbfbdcc6294c0a3abd2264",
+   "d": "2026-09-29",
+   "t": "Delete firestore.rules for an newer version",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "f63c5a6",
+   "full": "f63c5a6cae6892d4b5129eab99a8e1e50b56d224",
+   "d": "2026-09-29",
+   "t": "v.1.3.6",
+   "b": "road to big update where were gonna anounce an big gamechanger. for now \r\n> guestaccounts\r\n> end shift checklist",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "573d6a4",
+   "full": "573d6a4d9a527056852506ff69f8dd75b25a9bd5",
+   "d": "2026-09-28",
+   "t": "1.3.2 and addtitional extras.",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "016e4fa",
+   "full": "016e4fa25daeaab366d42fb9f42f86d9e59430b1",
+   "d": "2026-09-28",
+   "t": "v1.3.1",
+   "b": "Big update: we completely redesigned the first reentry line. By now, you have to install the app before you can use it. We also added a lot more stuff",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "626c6d6",
+   "full": "626c6d60f878845630fc30b541f36194386826cb",
+   "d": "2026-09-27",
+   "t": "werkte niet",
+   "b": "",
+   "a": "jorus"
+  },
+  {
+   "h": "59e6d75",
+   "full": "59e6d75b8c638188cf4fce264cc3d109d1ac4830",
+   "d": "2026-09-27",
+   "t": "test om chat reload te fixen",
+   "b": "Comment out the updateDoc call to prevent reactions from being updated.",
+   "a": "jorus"
+  },
+  {
+   "h": "4638294",
+   "full": "4638294108542b3072cc2589dcbe9dd536769062",
+   "d": "2026-09-24",
+   "t": "v1.2.5",
+   "b": "promo update aswell readme",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "630cc9d",
+   "full": "630cc9d6414527897ff7ecf8ed0f048519c9bac8",
+   "d": "2026-09-24",
+   "t": "v1.2.4",
+   "b": "bugfix update.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d3c6ad1",
+   "full": "d3c6ad1d68ff9d639037eb51ad9542e1e83484c6",
+   "d": "2026-09-23",
+   "t": "v1.3.2",
+   "b": "paar bekende bugs gefixed en promo.html heeft een upgrade gekregen.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "64f5aeb",
+   "full": "64f5aebc7a6de43923789b246dd5e17a110f972a",
+   "d": "2026-09-22",
+   "t": "v.1.3.1",
+   "b": "paar bekende bugs gefixed, en nieuwe features zoals Read receipts in de groepschat — onder je laatste bericht staat nu \"Gezien door ...\".\r\nReacties op berichten — drie eigen iconen (duim omhoog, vinkje, hartje) via het \"···\"-menu, met een klein pilletje onder het bericht.\r\nMaandoverzicht als PDF — nette, gemerkte PDF met samenvattingskaartjes, tabel per dienst en totaal per medewerker, naast de bestaande Excel-export.\r\nHoudbaarheidstermijn voor logboek-export — de dev kiest nu bij goedkeuren hoe lang (1 dag / 3 dagen / 1 week / geen limiet) de admin het kan downloaden; daarna toont het gesprek automatisch \"Verlopen\".\r\nProfielfoto's: er was al een centrale avatar-helper (foto > dev-logo > initialen) die bijna overal gebruikt wordt — ik heb de laatste plek (het \"nieuw gesprek\"-lijstje) er ook op aangesloten.\r\nEen echt veel mooiere laad-animatie: pulserende gloed op de achtergrond, een draaiende gradient-ring om het logo, en stuiterende puntjes bij de tekst.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "1c18542",
+   "full": "1c18542963b58de681adb00a1d2c01b7753bfd7b",
+   "d": "2026-09-22",
+   "t": "v.1.1.2",
+   "b": "bugfix of v1.1, and we added restrictions for dev and admin. See it in the app for a full explanation; please check the app.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d03efbb",
+   "full": "d03efbbe019c5ca608af9e0c9e9bb50d4db4c77a",
+   "d": "2026-09-21",
+   "t": "big v.1.1 update, handmade icons.",
+   "b": "we hebben overal zelfgemaakte icons nu, i.p.v. emoji's zoals ⬅️🤣💖",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "b96658d",
+   "full": "b96658d902645ac3de00bcb678b2a301d2bf0e76",
+   "d": "2026-09-04",
+   "t": "official v1.",
+   "b": "finaly no words.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "15f2e6e",
+   "full": "15f2e6ee6a818745bfb4c1f67f850de667e848b1",
+   "d": "2026-09-04",
+   "t": "v.9.9.9 last 1 bevore v1*",
+   "b": "paar bugfixes, en layout fixes. ook hebben aankondigingen een rebuild.\r\n*alleen als er geen bugs zijn is dit de laatste voor v1",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "020676b",
+   "full": "020676b7a0a11425af632f14c1f04bafb1ce37ab",
+   "d": "2026-09-03",
+   "t": "update v.9.9.8 (almost v1!!)",
+   "b": "Privéchat: grijze balk achter het invoerveld weg, strakkere look. Groepschat: @ en camera nu eigen lijniconen i.p.v. emoji, zonder het grijze rondje eromheen. Logo in topbar iets duidelijker afgerond. Inlogpagina: het bewegende gloei-effect op de knoppen is weg (rustige glazen knoppen), \"Wachtwoord vergeten?\" is nu een eigen pilletje met slotje-icoon i.p.v. platte tekst, en het vinkje bij \"verzoek verstuurd\" is ook een eigen icoon geworden. Beheerder-bevoegdheden flink uitgebreid: naast toevoegen/verwijderen/uitbetalen kan dev nu ook los intrekken: diensten aanmaken/bewerken, diensten goedkeuren, aankondigingen plaatsen, en medewerkers bewerken/schorsen/verwijderen. Met alles aangevinkt houdt een beheerder inderdaad zo goed als niks meer over — precies wat je vroeg. Allemaal ook echt in de Firestore-regels afgedwongen. Home: de 4 icoontjes op de statistiek-tegels zijn nu eigen lijniconen i.p.v. emoji.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "ef27f2c",
+   "full": "ef27f2c3762a09a2babeb2d54854baae2d04d7e5",
+   "d": "2026-09-03",
+   "t": "attept 10 bevore v1",
+   "b": "Wat er nu in zit:\r\n\r\nTopbar zweeft nu net als de onderste balk — zelfde glazen pil-stijl, los van de randen.\r\nDesktop-weergave écht breder (640px → 900px op grote schermen i.p.v. steken op 680px) en de achtergrond errond is nu echt zwart i.p.v. grijs, ook op laptop.\r\nEigen zwaai-icoontje (lijntekening, merkgeel) i.p.v. de 👋-emoji, bij beide begroetingen en de rondleiding.\r\nHomepage iets levendiger: kleine icoontjes op de statistiek-tegels.\r\nPrivéberichten netter: dagscheiding (\"Vandaag\"/\"Gisteren\"/datum), tijdstempels, en berichten van dezelfde persoon achter elkaar staan nu dichter op elkaar i.p.v. alles even ver uit elkaar.\r\nGranulaire beheerder-bevoegdheden: bij een beheerder-account bewerken (alleen zichtbaar voor dev) kun je nu los \"geen medewerkers toevoegen\", \"geen diensten verwijderen\" en \"niet mogen uitbetalen\" aanvinken. Het account blijft gewoon werken, alleen die specifieke knoppen verdwijnen voor die beheerder — en dit is ook echt in de Firestore-regels afgedwongen, niet alleen een knop die verstopt wordt.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "7f6b367",
+   "full": "7f6b36725b829eca3de992438dc952ba905c4d48",
+   "d": "2026-09-02",
+   "t": "extra things bevore v1. (bugfix attempt 9)",
+   "b": "\"Mag schenken\" bij collega's. Bij Beheer → Medewerkers → iemand bewerken staat nu een vinkje \"🍺 Mag schenken\" (sociale hygiëne/IVA). Bij Profiel → \"👥 Andere gebruikers\" ziet iedereen een lijst van collega's; klik op iemand voor foto, naam en die schenk-status.\r\nNavigatiestijl-keuze. Profiel → Weergave heeft nu ook een 🏝️/▭-keuze: zwevend eiland of de klassieke volle-breedte-balk. Persoonlijke voorkeur, per account onthouden.\r\nWachtwoord wijzigen is nu één knop die een eigen scherm opent met dezelfde sterktemeter als de registratiepagina.\r\nExport naar boekhouding, in Uitbetaling: een nette rij-per-persoon-per-dienst-lijst (datum, naam, uren, uurloon, bedrag, status) i.p.v. de matrixvorm van de bestaande export — dat is namelijk wat een boekhoudpakket of penningmeester wil zien, niet een rooster-matrix.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "0b4f2a3",
+   "full": "0b4f2a399293661708d53001f65f2bd9efb97ff3",
+   "d": "2026-09-01",
+   "t": "Big redisign update bevore v1",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "6367da6",
+   "full": "6367da6c4bce53214750712f6f5abf53b937d4b2",
+   "d": "2026-09-01",
+   "t": "bugfix attempt 8 bevore v1",
+   "b": "added hard reset and payout is redid. \r\nalso the change log will be stopped by *now*",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "5f2e0d3",
+   "full": "5f2e0d395ad56f30f2ed580dc0f7dd95f8b3c9ac",
+   "d": "2026-09-01",
+   "t": "bugfix attempt 7 before v1",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "6a9a3be",
+   "full": "6a9a3bea52dd8979fa4cffcd218a3767acdb70fd",
+   "d": "2026-09-01",
+   "t": "bugfix attempt 6 bevore v1 +extra",
+   "b": "added idle page, and fixed known bugs.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "708a25c",
+   "full": "708a25c021c48eba2b9cf10bd5839a2a493d2d0b",
+   "d": "2026-08-31",
+   "t": "Bugfix attempt 6 bevore v1",
+   "b": "agenda en shiftmaker fix. agenda op mobiel nu eindelijk goed.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "bff5320",
+   "full": "bff5320628544c16a5fb2206ebdc6b2e536da2cb",
+   "d": "2026-08-25",
+   "t": "securety update, bevore v1 (attempt 5)",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "23ea3e2",
+   "full": "23ea3e20e58b432f4a259f4b5a70893b72722f79",
+   "d": "2026-08-24",
+   "t": "bugfix attempt 4 bevore v1",
+   "b": "Privéberichten: geen e-mailkeuze meer (altijd alleen push), en nu een échte volledige pagina i.p.v. een pop-up\r\nPushmeldingen: eerlijke technische uitleg + de échte cross-device infrastructuur gebouwd (Firebase Cloud Messaging) — optioneel te activeren via Stap 6 in HANDLEIDING.md\r\nGeweest + uitbetaalde diensten: niet meer bewerkbaar/verwijderbaar, tonen \"🔒 Afgehandeld\"\r\nCustom laadanimatie: het logo dat ademt + een laadbalk, i.p.v. een generieke spinner\r\nEaster egg verbeterd: elke tik telt mee, bij 7x snel achter elkaar ontgrendel je een geheim NASA-APOD-thema (dagelijkse ruimtefoto als achtergrond)\r\nNieuw thema \"Liquid Glass\" 🫧 — puur optioneel, systeeminstelling blijft standaard",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "476d1cd",
+   "full": "476d1cd1a15f41da073241802559bae92fbde59e",
+   "d": "2026-08-22",
+   "t": "bugfix attempt 3 before v1",
+   "b": "pruvemessage en agenda-export zouden moeten werken.\r\nBeheerders kunnen weer niet dev-aankondigingen verwijderen (teruggedraaid)\r\nGeverifieerd-vinkje + profielfoto op veel meer plekken\r\nRuilverzoek-interesse nu ook visueel duidelijk in het originele bericht\r\nVerborgen easter egg 🍺 (tik 7x snel op het logo)\r\nFeestdagen-accent + eenmalige felicitatie (met een eerlijke kanttekening: het PWA-beginschermicoon zelf kan technisch niet dynamisch wisselen; dat is geen keuze, maar een OS-beperking)\r\nE-mailvoorkeuren-tekst verduidelijkt",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "2e6ae86",
+   "full": "2e6ae862792193c6c8e7e1045bcabffebd8d10f2",
+   "d": "2026-08-21",
+   "t": "bugfix 2 before v1",
+   "b": "ics export fixed, even as privat messaging and lotmore",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "db123ce",
+   "full": "db123ce55df99887440cf772a8f1004f0aa91870",
+   "d": "2026-08-19",
+   "t": "Adjust position of notif-dot element in app.html",
+   "b": "",
+   "a": "jorus"
+  },
+  {
+   "h": "cad063f",
+   "full": "cad063f92eeb6da051535c1f9b675a0c063c8816",
+   "d": "2026-08-19",
+   "t": "Update app.html",
+   "b": "",
+   "a": "jorus"
+  },
+  {
+   "h": "9a62e35",
+   "full": "9a62e3511f1807622ef1d891f28c278430af34fa",
+   "d": "2026-08-19",
+   "t": "Adjust position of notif-dot in app.html",
+   "b": "",
+   "a": "jorus"
+  },
+  {
+   "h": "f0f1663",
+   "full": "f0f16632aa8affa78eedadf23403f675a8c84705",
+   "d": "2026-08-19",
+   "t": "fix of v.0.9.9 and upcoming v1.0",
+   "b": "Where close guys!",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "cf0ab0b",
+   "full": "cf0ab0b0c762475172181d146268d740bab53305",
+   "d": "2026-08-19",
+   "t": "crucial fix attempt 1",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "dcd1d89",
+   "full": "dcd1d8948bc487456d1857726475163d889db7f9",
+   "d": "2026-08-18",
+   "t": "Update README.en.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "88ff9d6",
+   "full": "88ff9d60592f7492eda448e03885bb4b350691c5",
+   "d": "2026-08-18",
+   "t": "Update README.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "075d3d3",
+   "full": "075d3d343e5690d19479f9db60555310447436fa",
+   "d": "2026-08-18",
+   "t": "Rename README.en.md — English.md to README.en.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "8f03d78",
+   "full": "8f03d78f4f4552b1d9af3364ca86ea07b54ffc48",
+   "d": "2026-08-18",
+   "t": "Rename README.md — Nederlands.md to README.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "1805e36",
+   "full": "1805e36b5cea874232081a56c209b25342854578",
+   "d": "2026-08-18",
+   "t": "Delete README.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "da22b6c",
+   "full": "da22b6c2979633b08188e965f950271f765a0ba1",
+   "d": "2026-08-18",
+   "t": "readme update august",
+   "b": "we also added an English version",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "b3e55b8",
+   "full": "b3e55b8f041f4471bb95e231c63b8a96bd6547e9",
+   "d": "2026-08-18",
+   "t": "bugfix v0.9.9",
+   "b": "we fixed some known bugs. thanks to jorus.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "3a6aaf8",
+   "full": "3a6aaf8a14627edd5b64e6fcf6302250582b0bea",
+   "d": "2026-08-17",
+   "t": "v0.9.9",
+   "b": "Bugfixes:\r\n\r\n🔴 Roosterpagina volledig onklikbaar (2 oorzaken, hierboven uitgelegd)\r\nAnnouncement-knop \"insufficient permissions\"\r\nWachtwoord-reset link ongeldig\r\nRooster opende niet op \"Alles\"\r\nDev was inroosterbaar / verscheen in beschikbaarheidslijsten\r\nBeheerder kon geen dev-rol toewijzen\r\nRuil: bevestigingsknoppen verschenen zonder getoonde interesse\r\nAgenda-export werkte niet op mobiel/PWA\r\nPin-bericht verdween bij scrollen in chat\r\nNieuwe diensten stuurden geen push/mail\r\nBeheerder kreeg melding bij élk chatbericht i.p.v. alleen bij @tag\r\napple-touch-icon was SVG (iOS toont dan een leeg icoon)\r\n\r\nNieuwe features:\r\n\r\nPrivéberichten (DM) + Meldingen als volledige pagina\r\nBevestigingsreminder-systeem (30u, instelbaar) + \"geweest onbevestigd\"-status\r\nDashboard: goedgekeurd/uitbetaald apart, + lid-sinds/inkomsten/aantal-diensten\r\nPWA-installatiepopup met aparte visuele iOS-uitleg + vinkje bij Profiel\r\nDev: speciale aankondigingen (kleur, pop-up, push+mail)\r\nDienstnotities met foto (bij aanmaken én bewerken)\r\nAfwezigheid als periode + notitie bewerkbaar\r\nApp-tour (automatisch bij 1e login + herstartbaar)\r\nLogin/logout-logboek (alleen dev), met apparaat + IP\r\nDev-paneel: uitnodigen/verwijderen/schorsen (écht afgedwongen)/rollen/vinkje/logo\r\nDark/light mode-toggle + verbeterde contrasten in licht\r\nWachtwoordsterktemeter + tonen/verbergen\r\nVoorwaarden-pagina + verplicht akkoord bij registratie\r\niOS: juiste iconen, safe-areas, geen ongewenste inzoom, minder bounce-scroll\r\n\r\nBeveiliging: alleen dev kent dev-rol toe (ook server-side afgedwongen), uitnodigingen niet meer manipuleerbaar, schorsing blokkeert echt de login.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "a9d6e40",
+   "full": "a9d6e400f0ccabdd3e669314db685e94b8a8cae0",
+   "d": "2026-08-09",
+   "t": "update augustus 2026",
+   "b": "Opgelost\r\nAnnouncement-knop \"insufficient permissions\" — de announcements-collectie had helemaal geen Firestore-regel, dus werd elke schrijfactie geblokkeerd. Regel toegevoegd.\r\nWachtwoord-reset link ongeldig — het oude systeem maakte nooit een écht tijdelijk wachtwoord aan. Volledig vervangen door Firebase's eigen, beveiligde reset-flow. (check Stap 3 in HANDLEIDING.md — authorized domain!)\r\nRooster opent niet op \"Alles\" — twee losstaande tab-sets deelden per ongeluk dezelfde variabele. Losgekoppeld; rooster opent nu standaard op \"Alles\".\r\nBeheerders konden geen dev-rol toewijzen — het gekozen rol-veld werd nooit opgeslagen bij het aanmaken van een uitnodiging. Gefixt.\r\n@tag in chat stuurt alleen nog een pushmelding, geen e-mail meer.\r\nPin-bug in chat — het vastgepinde bericht stond bovenin de scrollende berichtenlijst en verdween dus bij scrollen. Nu een eigen vaste balk, altijd zichtbaar.\r\nUitbetaalknop uit de chat gehaald; foto's versturen toegevoegd (incl. slepen/droppen).\r\nExport-agendaknop werkte niet (vooral op mobiel/PWA) — iOS/Android PWA's blokkeren soms stille blob-downloads. Nu eerst een poging via de Deel-functie (Web Share API), met download als fallback op desktop. Ook toegevoegd aan de dagweergave (stond er eerder niet).\r\nKalender \"loopt vast\" — defensieve null-checks/try-catch toegevoegd rond het kalender-rendering, zodat één foutje niet alles blokkeert.\r\nPromo.html paste niet op mobiel — de vaste 1280×720-pixelinhoud werd nooit echt geschaald. Nu een correcte, universele schaal-fix (werkt in portret én landschap).\r\nHelp-knop stuurt niet meer naar de promo-pagina, maar toont per pagina een korte, relevante uitleg (wat het is, wat je ermee kan, tips).\r\nBeheerder zag zelf nooit aankondigingen op de homepage — ontbrak, nu toegevoegd.\r\n✨ Nieuw\r\nPrivéberichten (DM) tussen medewerker en beheerder/dev, los van de groepschat.\r\nMeldingen is nu een volledige pagina (i.p.v. een dropdown-paneeltje), met tabs \"Systeem\" (aankondigingen/tags/uitbetalingen — visueel anders) en \"Berichten\" (de DM's).\r\nBevestigingsreminder-systeem: melding direct na afloop van een onbevestigde dienst, tweede herinnering na een instelbaar aantal uren (standaard 30, aan te passen onder Beheer → Instellingen), en de oorspronkelijke tijd is daarna niet meer door de beheerder aan te passen — status toont \"Geweest, onbevestigd\".\r\nDashboard medewerker: \"Goedgekeurd\" en \"Uitbetaald\" nu apart zichtbaar i.p.v. samengevoegd.\r\nPWA-installatiepopup direct na het aanmaken van een account, met een vinkje bij Profiel zodra de app daadwerkelijk geïnstalleerd is.\r\nDev: speciale aankondigingen — eigen (rode) kleur, verschijnen als in-app pop-up, en sturen meteen push + e-mail naar de doelgroep.\r\nDienstnotities met foto — beheerders kunnen bij een dienst een notitie + afbeelding toevoegen; medewerkers zien dit in hun rooster en krijgen een melding.\r\nMeer animaties: tabs, knoppen, chatbubbels, tabbalk, modals.\r\nBeveiliging aangescherpt: uitnodigingen kunnen niet meer door willekeurige bezoekers herschreven worden vóór registratie, wachtwoord-reset-systeem grondig herzien.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "987903f",
+   "full": "987903fe9a1a054b0e7b3e0cd6a53f2092fb1616",
+   "d": "2026-07-03",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "56041ff",
+   "full": "56041ff40aab33fa0603e1b530e4dec38a177bb7",
+   "d": "2026-06-30",
+   "t": "Update README.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "c0845ff",
+   "full": "c0845ff7e0747e2efb7a79df2af4f902081c9738",
+   "d": "2026-06-30",
+   "t": "final bug fixes before v1",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d99fb1f",
+   "full": "d99fb1f344cc963e4e142ef0bf6cb7467f27d800",
+   "d": "2026-06-30",
+   "t": "medewerker toevoegen bug fixed",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "cf97bf9",
+   "full": "cf97bf909e11d6d6f7fa372ed42f3c7e2b5fd576",
+   "d": "2026-06-28",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d20c5f1",
+   "full": "d20c5f1881f3072e9fdd343749af7d416c18fa76",
+   "d": "2026-06-24",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "3c4953d",
+   "full": "3c4953d5261eeb74166393e1e994aa0a46285a9a",
+   "d": "2026-06-21",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "80b86f5",
+   "full": "80b86f5aee28fe7cd4ea3d9697b3204b1c8037d5",
+   "d": "2026-06-21",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "2f38f9d",
+   "full": "2f38f9d47c393a59770b9993d5e7cc562d18e81b",
+   "d": "2026-06-19",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "586e9eb",
+   "full": "586e9ebc14432ddfa578e7cff30e41d62b064599",
+   "d": "2026-06-19",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "475695a",
+   "full": "475695a3aa33fcd38f403eb6a0b33a5d77238573",
+   "d": "2026-06-18",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "4448b3b",
+   "full": "4448b3be9b899c587fc37fa7dd1111dfdb077589",
+   "d": "2026-06-17",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "82e75ed",
+   "full": "82e75eda5b2aaa83c435a14ecc1068d33980c2ae",
+   "d": "2026-06-16",
+   "t": "Update README.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "6191128",
+   "full": "6191128b6c1d7f4233b05c8e68f2ba36663ad618",
+   "d": "2026-06-15",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "5b78ea1",
+   "full": "5b78ea1c3985bba2238ba263069091a10ddafa4e",
+   "d": "2026-06-14",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "b8d8a81",
+   "full": "b8d8a810445107aad97f1ffbe75c4ea490e5475f",
+   "d": "2026-06-14",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "c427610",
+   "full": "c427610ee26538d7bdbc2755e8d51936a98ba9af",
+   "d": "2026-06-13",
+   "t": "BIG UPDATE",
+   "b": "Wat er nieuw in zit:\r\n Groepschat — iedereen ziet alles. Medewerkers kunnen berichten sturen, admins kunnen berichten verwijderen. Elke bericht stuurt een in-app notificatie + email naar admins. Bij een @tag krijgt die persoon een extra notificatie. Admins kunnen met één knop een uitbetalingsaankondiging doen.\r\nDienst ruilen — medewerker tikt \"Ruilen\" op zijn dienst, selecteert hem en voegt een toelichting toe. Er verschijnt een kaartje in de chat. Een collega klikt \"Ik neem het over\". Admin keurt goed → dienst wordt automatisch doorgeschoven → beide medewerkers krijgen in-app + email notificatie. Agenda export — knop op elke volgende dienst genereert een .ics bestand. Op iPhone opent dat direct in Agenda, op Android ook.\r\nDev dashboard — software-rol ziet alleen Chat en een Dev-paneel: stuur in-app/email meldingen naar specifieke gebruikers of iedereen, bekijk accounts.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "6d993ea",
+   "full": "6d993ea1f431e3cfef4a7c025631f713f8cd49ff",
+   "d": "2026-06-12",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "a2fb455",
+   "full": "a2fb4554ad837cf6f72dd1986646d1d9698a7741",
+   "d": "2026-06-12",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "46aa5ad",
+   "full": "46aa5ada984571a1f35e92c6478fd5acb51bef66",
+   "d": "2026-06-11",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "80aff4c",
+   "full": "80aff4c52d9f79268d8cef4bf315d775cde45596",
+   "d": "2026-06-11",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "5be734b",
+   "full": "5be734bb05b020b91166da5431d99c263a04b3d0",
+   "d": "2026-06-11",
+   "t": "catch dump",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "08c8bee",
+   "full": "08c8bee66d4406190f835bc704ab3091a863d686",
+   "d": "2026-06-11",
+   "t": "bug fix attempt 2.4",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "1ad6715",
+   "full": "1ad67151e225cc7ed4b0d1247e190a263ede9f46",
+   "d": "2026-06-11",
+   "t": "Big debug",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d87f3e2",
+   "full": "d87f3e2b8dcbfa43dffde7d45c1695aa03541c12",
+   "d": "2026-06-11",
+   "t": "inlog fix",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "e23f623",
+   "full": "e23f623cf113121ee9dccadbca382af5c63a5589",
+   "d": "2026-06-11",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "455f4af",
+   "full": "455f4afcc3692b8a8065857607df25ed75614a99",
+   "d": "2026-06-10",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d5413f7",
+   "full": "d5413f7b9c8e85c5bd4e26a11e858cdb5f56d5b6",
+   "d": "2026-06-10",
+   "t": "frisse start",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "b2dc218",
+   "full": "b2dc218fb92a0e74cdb7826fa13c9ced992378c6",
+   "d": "2026-06-10",
+   "t": "invite update",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "f25b8b3",
+   "full": "f25b8b34c2208eb7feac5e915bf0cd11c205b737",
+   "d": "2026-06-09",
+   "t": "grote bugfix en mailverandering",
+   "b": "ipv [e-mailadres] nu [e-mailadres]",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "0434993",
+   "full": "04349937b97a92cf54f6c157dd8c6adda577144b",
+   "d": "2026-06-09",
+   "t": "bug fixer 2.0",
+   "b": "reset-pw.html — volledig herschreven. Werkt nu echt: laadt het tempPw uit Firestore, logt daarmee in, en stelt het nieuwe wachtwoord direct in. Als de link al gebruikt of verlopen is, ziet de medewerker een duidelijke foutmelding.\r\n\r\nregister.html — \"email already in use\" fix: als Firebase Auth het account al kent (bijv. van een mislukte eerdere poging), probeert het nu in te loggen met het tempPw uit de invite en het wachtwoord bij te werken. Ook: nieuw icoon, EmailJS bijgewerkt.\r\n\r\nindex.html — nieuw icoon (favicon + apple-touch-icon), EmailJS credentials bijgewerkt.\r\n\r\napp.html — nieuw EmailJS credentials (service_ahm3hnp + IUhBp9uzDvqwoZlls), favicon toegevoegd, service worker geregistreerd, push toestemming wordt 2 seconden na inloggen gevraagd.\r\n\r\nmanifest.json — verwijst nu naar icon.svg in plaats van een ingebakken base64 PNG. App-kleur ook bijgewerkt naar MHV blauw.\r\n\r\nsw.js — nieuw bestand. Vangt push-events op en toont een notificatie op het scherm/telefoon. De app is nu een volwaardige PWA met push support.",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "1add292",
+   "full": "1add2928bbee4b4b62de74542a1d0d20069dc224",
+   "d": "2026-06-09",
+   "t": "Rename app (2).html to app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "1064b67",
+   "full": "1064b6781d19bada051c02d853bf5633210620ac",
+   "d": "2026-06-09",
+   "t": "Delete app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "9983f64",
+   "full": "9983f64337238abf736b7c3b42f462da71aca916",
+   "d": "2026-06-09",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "e4ca650",
+   "full": "e4ca650a690ae2aad79d62cd30eb9f98de3bf3ae",
+   "d": "2026-06-09",
+   "t": "Rename app (1).html to app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "10b8802",
+   "full": "10b8802a55a4a0d9538d68d8bac71fe09a84ea22",
+   "d": "2026-06-09",
+   "t": "Delete app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "c4c9774",
+   "full": "c4c977479bd83b90fb5c7efc468e2a0f6a3723c1",
+   "d": "2026-06-09",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "ceecdf3",
+   "full": "ceecdf313c659d6626a95d85a7922dd713639a91",
+   "d": "2026-06-09",
+   "t": "ww vergeten bug fix en new icon",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "84948a5",
+   "full": "84948a5d9caf3ee96c058e644873fd431e0a7892",
+   "d": "2026-06-08",
+   "t": "Delete CNAME",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "b63c338",
+   "full": "b63c3385c66ebfa7f6b86e38e2e885ab3f45a442",
+   "d": "2026-06-08",
+   "t": "Create CNAME",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "fa5a5ef",
+   "full": "fa5a5efef287501471096d501c7aa69ee73278a9",
+   "d": "2026-06-08",
+   "t": "Update reset-pw.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "18f4aee",
+   "full": "18f4aeebebb97b682fcd18462c4fad470904ff34",
+   "d": "2026-06-08",
+   "t": "bug remover",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "8aa03f9",
+   "full": "8aa03f995a0ccd8098d9153f67accc271077fe90",
+   "d": "2026-06-08",
+   "t": "Update reset-pw.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "a34314e",
+   "full": "a34314e19ba4f36db07f0022799b808efb28e2f6",
+   "d": "2026-06-08",
+   "t": "Update reset-pw.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d07b78d",
+   "full": "d07b78dc42b579d878b0d5fc62eb17dcbc0a6eb3",
+   "d": "2026-06-08",
+   "t": "Update index.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "f9d9b1f",
+   "full": "f9d9b1f79a3e90011103b44e4701a853c4c1c2b5",
+   "d": "2026-06-08",
+   "t": "Update app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "3053f30",
+   "full": "3053f30fab4dc80b07570d6c87d9090dbfa4874d",
+   "d": "2026-06-08",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "0fea68c",
+   "full": "0fea68c96ee15b18bc8efa90c43d3044a8394de4",
+   "d": "2026-06-07",
+   "t": "Update and rename index (3).html to index.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "266b7d3",
+   "full": "266b7d35596d3bae4129fe932d96895e18e2580d",
+   "d": "2026-06-07",
+   "t": "Update app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "d234865",
+   "full": "d234865ae7e72bd6fd7dba2c8c8e1e7500d629c7",
+   "d": "2026-06-07",
+   "t": "Delete index.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "e551cff",
+   "full": "e551cff6c2c95ed2a93eb948a37329bbf694341b",
+   "d": "2026-06-07",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "9e23034",
+   "full": "9e2303487303e820c254a89ef4bc5db215fdd2a7",
+   "d": "2026-06-07",
+   "t": "Update app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "602f972",
+   "full": "602f97235730f1f9c8f500bf76c564bcd0846957",
+   "d": "2026-06-07",
+   "t": "Update README.md",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "c559d8e",
+   "full": "c559d8eb76b19568ef73dcfa95317c6273d3046d",
+   "d": "2026-06-07",
+   "t": "big redisign",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "fc985f7",
+   "full": "fc985f72461934a886974d97199910f234400c7c",
+   "d": "2026-06-06",
+   "t": "Update app.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "9223bba",
+   "full": "9223bbaf839671a147ff6a94228ed67895b1b77c",
+   "d": "2026-06-06",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "9184099",
+   "full": "91840995e2848e76409f7d728997ae9484968be9",
+   "d": "2026-06-06",
+   "t": "Update seed-admin.html",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "6f89ba7",
+   "full": "6f89ba7cc123a6ef985b038fe41b5d406e1893c6",
+   "d": "2026-06-06",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "3bf8a38",
+   "full": "3bf8a3812bf300062030380ce4e00416240a0536",
+   "d": "2026-06-06",
+   "t": "Add files via upload",
+   "b": "",
+   "a": "AdminM@ssel"
+  },
+  {
+   "h": "96d7476",
+   "full": "96d74766e59828f4f2c6362d75ee5aa7d9c1a768",
+   "d": "2026-06-06",
+   "t": "Initial commit",
+   "b": "",
+   "a": "AdminM@ssel"
+  }
+ ],
+ "synced": "2026-11-05T21:06:38.047Z"
+}
