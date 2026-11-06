@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://adminmossel.github.io/companywork/sitemap.xml
