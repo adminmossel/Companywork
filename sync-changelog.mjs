@@ -55,10 +55,18 @@ export function parse(md) {
   return E;
 }
 
+const X = s => String(s).replace(/[<>&"]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]));
+function rss(d) {
+  const items = d.commits.slice(0, 40).map(c => `<item><title>${X(c.t)}</title><link>https://github.com/${d.repo}/commit/${c.full}</link><guid isPermaLink="true">https://github.com/${d.repo}/commit/${c.full}</guid><pubDate>${new Date(c.d + "T12:00:00Z").toUTCString()}</pubDate><description>${X(c.b || c.t)}</description></item>`).join("");
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>companywork changelog</title><link>https://adminmossel.github.io/companywork/changelog.html</link><description>Alle wijzigingen van MHVwork, de basis van companywork.</description><language>nl</language><lastBuildDate>${new Date(d.commits[0].d + "T12:00:00Z").toUTCString()}</lastBuildDate>${items}</channel></rss>\n`;
+}
 const cs = await commits();
 const md = process.env.SRC_LOCAL ? fs.readFileSync(process.env.SRC_LOCAL + "/CHANGELOG.md", "utf8") : await get(`https://raw.githubusercontent.com/${REPO}/main/CHANGELOG.md`, false);
 const next = { repo: REPO, entries: JSON.parse(redact(JSON.stringify(parse(md)))), commits: cs };
 let old = {}; try { old = JSON.parse(fs.readFileSync(OUT, "utf8")); } catch {}
+fs.writeFileSync("changelog.xml", rss(next));
+const dts = next.commits.map(c => c.d).sort();
+fs.writeFileSync("changelog-summary.json", JSON.stringify({ commits: next.commits.length, versions: next.entries.length, first: dts[0], last: dts[dts.length - 1] }) + "\n");
 const same = JSON.stringify({ ...old, synced: 0 }) === JSON.stringify({ ...next, synced: 0 });
 if (same) console.log("Geen wijzigingen.");
 else { fs.writeFileSync(OUT, JSON.stringify({ ...next, synced: new Date().toISOString() }, null, 1)); console.log(`Gesynchroniseerd: ${cs.length} commits, ${next.entries.length} versies.`); }

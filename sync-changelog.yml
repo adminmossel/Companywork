@@ -16,5 +16,5 @@ jobs:
       - run: |
           git config user.name "companywork-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add changelog-data.json
+          git add changelog-data.json changelog.xml changelog-summary.json
           git diff --staged --quiet || (git commit -m "Sync changelog met MHVwork" && git push)
