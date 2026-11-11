@@ -389,7 +389,7 @@ const _r=render;render=function(){const on=!!S.in;$("#tb").style.display=on?"":"
  if(S.idle)ph.insertAdjacentHTML("beforeend",`<div class="idl" data-a="idle0"><div class="clk">19:42</div><div class="dt">Vandaag · vrijdag 6 november</div>${S.sh_.filter(x=>x.d=="Vr 6 nov").map(x=>`<div class="sc p"><div><small>${x.t}</small><b>${x.w.map(nm).join(" & ")}</b></div></div>`).join("")}<div class="note" style="text-align:center;margin-top:20px">Tik om te sluiten</div></div>`);
  if(BR.ac)ph.querySelectorAll(".ft span").forEach(x=>x.textContent="Powered by companywork · Made in Meppel");
  ph.classList.toggle("xm",!!S.xm);
- if(S.in&&S.tab=="chat"&&!S.ty0){S.ty0=1;setTimeout(()=>{S.ty=1;S.tab=="chat"&&render()},1200);setTimeout(()=>{S.ty=0;S.chat.push(["Daan","Ik ben er, tot vrijdag!"]);S.tab=="chat"&&render()},3300)}};
+ if(S.in&&S.tab=="chat"&&!S.ty0&&!window._chatIntroDone){S.ty0=1;window._chatIntroDone=1;setTimeout(()=>{S.ty=1;S.tab=="chat"&&render()},1200);setTimeout(()=>{S.ty=0;S.chat.push(["Daan","Ik ben er, tot vrijdag!"]);S.tab=="chat"&&render()},3300)}};
 const go=(k,t)=>{S.ov=k;render();setTimeout(()=>{S.ov=k+"ok";render();setTimeout(()=>{S.ov=null;S.in=1;S.lim=0;S.tab="home";render();toast(t)},800)},1000)};
 Object.assign(A,{login:()=>{S.in=1;S.lim=0;toast("Ingelogd")},face:()=>go("face","Ingelogd met Face ID"),qr:()=>go("qr","Ingelogd met je persoonlijke QR"),code:()=>S.sh={k:"code"},code2:()=>S.sh={k:"code"},
  codein:()=>{const v=($("#sc").value||"").trim();if(v.length<6){toast("Minstens 6 tekens");return true}if(S.in){S.sh=null;toast("Snelcode opgeslagen")}else{S.in=1;S.lim=1;S.sh=null;S.tab="home";toast("Ingelogd met snelcode")}},
@@ -543,7 +543,8 @@ const STEPS={emp:[["Snel inloggen",FX[0][1],"Kies Face ID, Scan QR of Snelcode",
  ["Teamchat",FX[4][1],"Tik op een bericht om te reageren",()=>{S.tab="chat"}],
  ["Meldingen op tijd",FX[2][1],"Je meldingen staan hier",()=>{S.sh={k:"bell"}}],
  ["Beschikbaar en afwezig","Geef per dag door wanneer je kunt, en meld je afwezig met een reden.","Geef door wanneer je kunt of niet kunt",()=>{S.tab="avail"}],
- ["Op je beginscherm","Zet de app als icoon op je telefoon, zonder app-store.","Tik op Voeg toe",()=>{S.hs=1}]],
+ ["Op je beginscherm","Zet de app als icoon op je telefoon, zonder app-store.","Tik op Voeg toe",()=>{S.hs=1}],
+ ["Ook gewoon hier, op de homepage","Alles wat je net zag kun je ook helemaal boven aan deze pagina proberen: zelfde demo, zelfde telefoon, live en direct.","Probeer het bovenaan de pagina",()=>{S.tab="home"}]],
 adm:[["Overzicht en goedkeuren","Zie in één blik wat nog betaald moet worden, wat op goedkeuring wacht en welke diensten nog open staan.","Keur een dienst goed met één tik",()=>{S.tab="home"}],
  ["Diensten maken","Maak een dienst met of zonder naam erop, kies het aantal plekken en laat teamleden zich aanmelden.","Maak een nieuwe dienst aan",()=>{S.tab="rooster";S.sh={k:"new"}}],
  ["Aanmeldingen kiezen","Kies zelf wie je op een open dienst zet, of laat wie zich het eerst aanmeldt er direct op staan.","Kies uit de aanmeldingen",()=>{S.tab="rooster";S.sh={k:"sh",i:3}}],
@@ -553,15 +554,21 @@ adm:[["Overzicht en goedkeuren","Zie in één blik wat nog betaald moet worden, 
  ["Aankondigen","Plaats een aankondiging in een kleur naar keuze, zichtbaar op het startscherm van je team.","Plaats een aankondiging",()=>{S.tab="beheer";S.pt="ann"}],
  ["Bevoegdheden per persoon",FX[8][1],"Dit mag een beheerder",()=>{S.tab="profiel";S.sh={k:"perm"}}],
  ["Bar-scherm",FX[7][1],"Het bar-scherm voor op een tablet",()=>{S.idle=1}],
- ["Op je beginscherm","Zet de app als icoon op je telefoon, zonder app-store.","Tik op Voeg toe",()=>{S.hs=1}]]};
-let cur=-1,tk=0;
-function stepsBuild(r){const L=STEPS[r]||STEPS.emp;cur=-1;$("#ss").innerHTML=L.map((x,i)=>`<div class="stp" data-t="${i}" tabindex="0" role="button"><span>${String(i+1).padStart(2,"0")}</span><h3>${x[0]}</h3><p>${x[1]}</p><span class="try">Open in de demo →</span></div>`).join("")}
+ ["Op je beginscherm","Zet de app als icoon op je telefoon, zonder app-store.","Tik op Voeg toe",()=>{S.hs=1}],
+ ["Ook gewoon hier, op de homepage","Alles wat je net zag kun je ook helemaal boven aan deze pagina proberen: zelfde demo, zelfde telefoon, live en direct.","Probeer het bovenaan de pagina",()=>{S.tab="home"}]]};
+let cur=-1,stepObs=null;
+function stepsBuild(r){const L=STEPS[r]||STEPS.emp;cur=-1;
+ $("#ss").innerHTML=L.map((x,i)=>`<div class="stp" data-t="${i}" tabindex="0" role="button"><span>${String(i+1).padStart(2,"0")}</span><h3>${x[0]}</h3><p>${x[1]}</p><span class="try">Open in de demo →</span></div>`).join("");
+ if(stepObs){stepObs.disconnect();stepObs=null}
+ const st=document.querySelectorAll("#ss .stp");if(!st.length)return;
+ stepObs=new IntersectionObserver(es=>{
+  if(!matchMedia("(min-width:961px)").matches||document.querySelector(".story.pcm"))return;
+  es.forEach(e=>{if(!e.isIntersecting)return;const i=+e.target.dataset.t;if(i===cur)return;cur=i;st.forEach((el,k)=>el.classList.toggle("on",k==i));applyStep(i)})
+ },{rootMargin:"-48% 0px -48% 0px",threshold:0});
+ st.forEach(e=>stepObs.observe(e))}
 function applyStep(i){const r=S.r,x=(STEPS[r]||STEPS.emp)[i];if(!x)return;init(r);S.in=1;S.lim=0;S.tab="home";S.sh=null;x[3]();render();cap(x[2])}
-function stepScan(){tk=0;const st=document.querySelectorAll("#ss .stp");if(!st.length||!matchMedia("(min-width:961px)").matches||document.querySelector(".story.pcm"))return;const mid=innerHeight*.5;let best=-1,bd=1e9;
- st.forEach((e,i)=>{const r=e.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;const d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
- if(best>=0&&bd<innerHeight*.45){if(best!=cur){cur=best;st.forEach((e,i)=>e.classList.toggle("on",i==best));applyStep(best)}}
- else if(cur!=-1&&st[0].getBoundingClientRect().top>mid){cur=-1;st.forEach(e=>e.classList.remove("on"));init(S.r);cap("")}}
-addEventListener("scroll",()=>{if(!tk)tk=requestAnimationFrame(stepScan)},{passive:true});addEventListener("resize",()=>{if(!tk)tk=requestAnimationFrame(stepScan)});
+{let tk=0;addEventListener("scroll",()=>{if(tk)return;tk=requestAnimationFrame(()=>{tk=0;if(cur==-1||!matchMedia("(min-width:961px)").matches)return;const ss=$("#ss");if(!ss)return;const r=ss.getBoundingClientRect(),mid=innerHeight*.5;if(r.top>mid||r.bottom<mid){cur=-1;document.querySelectorAll("#ss .stp").forEach(e=>e.classList.remove("on"));init(S.r);cap("")}})},{passive:true})}
+{let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>stepsBuild(S.r),200)})}
 $("#ss").addEventListener("click",e=>{const x=e.target.closest(".stp");if(!x)return;const i=+x.dataset.t;cur=i;document.querySelectorAll("#ss .stp").forEach((y,k)=>y.classList.toggle("on",k==i));applyStep(i);x.scrollIntoView({behavior:"smooth",block:"center"})});
 $("#ss").addEventListener("keydown",e=>{if((e.key=="Enter"||e.key==" ")&&e.target.classList.contains("stp")){e.preventDefault();e.target.click()}});
 RF.push(()=>stepsBuild(S.r));
